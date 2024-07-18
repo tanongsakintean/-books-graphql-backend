@@ -1,0 +1,19 @@
+spring:
+    profiles:
+        active: ${ACTIVE_PROFILE:dev}
+management:
+    endpoint:
+        prometheus:
+            enabled: true
+    endpoints:
+        web:
+            exposure:
+                include:  info, health, prometheus, metrics
+    metrics:
+        web:
+            server:
+                request:
+                    autotime:
+
+
+

@@ -1,0 +1,15 @@
+
+type Author {
+    authorId: ID
+    firstName: String
+    lastName: String
+    birthDay: String
+    bio: String
+}
+
+input AuthorInput {
+    firstName: String
+    lastName: String
+    birthDay: DateTime
+    bio: String
+}

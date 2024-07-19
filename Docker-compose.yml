@@ -45,10 +45,21 @@ services:
     container_name: redis-insight
     ports:
       - "8001:8001"
+  pgadmin:
+    image: dpage/pgadmin4
+    container_name: pgadmin4_container
+    restart: always
+    ports:
+      - "8888:80"
+    environment:
+      PGADMIN_DEFAULT_EMAIL: admin@gmail.com
+      PGADMIN_DEFAULT_PASSWORD: $DB_PASSWORD
+    volumes:
+      - pgadmin-data:/var/lib/pgadmin
+
 
 
 volumes:
   db:
-
-
+  pgadmin-data:
 

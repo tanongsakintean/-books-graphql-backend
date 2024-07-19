@@ -1,0 +1,12 @@
+type Publisher {
+    publisherId: ID
+    name: String
+    address: String
+    website: String
+}
+
+input PublisherInput {
+    name: String
+    address: String
+    website: String
+}

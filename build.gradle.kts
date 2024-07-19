@@ -60,6 +60,7 @@ dependencies {
 
 	///graphql
 	implementation("org.springframework.boot:spring-boot-starter-graphql")
+	implementation("com.graphql-java:graphql-java-extended-scalars:22.0")
 
 	// cache redis
 	implementation("org.springframework.boot:spring-boot-starter-data-redis-reactive")

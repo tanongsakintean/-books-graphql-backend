@@ -7,5 +7,5 @@ import reactor.core.publisher.Flux
 
 @Repository
 interface BookRepository: ReactiveCrudRepository<Book, Long> {
-    fun findByAuthorId(authorId: Long): Flux<Book>
+//    fun findByAuthorId(authorId: Long): Flux<Book>
 }

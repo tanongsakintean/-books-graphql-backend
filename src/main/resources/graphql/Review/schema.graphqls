@@ -1,0 +1,15 @@
+type Review {
+    reviewId: ID
+    bookId: Int
+    userId: Int
+    rating: Int
+    comment: String
+    createdAt: String
+}
+
+input ReviewInput {
+    bookId: Int
+    userId: Int
+    rating: Int
+    comment: String
+}

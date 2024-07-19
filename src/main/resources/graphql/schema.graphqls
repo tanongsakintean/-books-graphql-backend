@@ -1,20 +1,18 @@
+scalar DateTime
+
 type Query {
-    bookById(id: ID): Book
-    books: [ResponseAuthorBooks]
+    author(authorId: ID): Author
+    authors: [Author]
+    user(userId: ID): User
+    users: [User]
 }
 
 type Mutation {
-    createAuthor(input: AuthorInput): Author
-    createBook(input: BookInput): Book
-}
+    createAuthor(author: AuthorInput): Author
+    updateAuthor(author: AuthorInput,authorId: ID): Author
+    deleteAuthor(authorId: ID): Author
 
-type AuthorWrapBooks {
-    id: ID
-    firstName: String
-    lastName: String
-    books: [Book]
-}
-
-type ResponseAuthorBooks {
-   author: AuthorWrapBooks
+    createUser(user: UserInput): User
+    updateUser(user: UserInput, userId: ID): User
+    deleteUser(userId: ID): User
 }

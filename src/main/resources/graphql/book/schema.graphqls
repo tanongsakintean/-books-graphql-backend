@@ -1,0 +1,27 @@
+type Book {
+    bookId: ID
+    title: String
+    isbn: String
+    publicationDate: String
+    publisherId: Int
+    genreId: Int
+    summary: String
+    pageCount: Int
+}
+
+type BookAuthor {
+    bookId: Int
+    authorId: Int
+}
+
+
+input BookInput {
+    title: String
+    isbn: String
+    publicationDate: String
+    publisherId: Int
+    genreId: Int
+    summary: String
+    pageCount: Int
+    authorId: [Int]
+}

@@ -6,25 +6,23 @@ import jakarta.persistence.GenerationType
 import lombok.AllArgsConstructor
 import lombok.Data
 import lombok.NoArgsConstructor
-import org.springframework.data.relational.core.mapping.Table
 import org.springframework.data.annotation.Id
+import org.springframework.data.relational.core.mapping.Table
 import java.io.Serializable
 import java.sql.Timestamp
 
 @Entity
-@Table(name = "books")
+@Table(name = "reviews")
 @AllArgsConstructor
 @NoArgsConstructor
 @Data
-data class Book(
+data class Review(
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    val reviewId: Long? = null,
     val bookId: Long? = null,
-    val title: String? = null,
-    val isbn: String? = null,
-    val publicDate: Timestamp? = null,
-    val publisherId: Int? = null,
-    val genreId: Int? = null,
-    val summary: String? = null,
-    val pageCount: Int? = null,
+    val userId: Long? = null,
+    val rating: Int? = null,
+    val comment: String? = null,
+    val createdAt: Timestamp? = null,
 ): Serializable

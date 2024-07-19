@@ -12,9 +12,9 @@ spring:
         redis:
             time-to-live: 60000  #data will be cleared from the cache after every minute.
     application:
-        name: boilerplate-webflux
+        name: book-backend
     r2dbc:
-        url: ${URL:r2dbc:postgresql://localhost:5432/boilerplate_db}
+        url: ${URL:r2dbc:postgresql://localhost:5432/books_db}
         username: ${USERNAME:postgres}
         password: ${PASSWORD:1234}
     data:

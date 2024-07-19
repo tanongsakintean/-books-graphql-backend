@@ -1,0 +1,16 @@
+type User {
+    userId: ID
+    username: String
+    email: String
+    firstName: String
+    lastName: String
+    createAt: DateTime
+}
+
+input UserInput {
+    username: String
+    passwordHash: String
+    email: String
+    firstName: String
+    lastName: String
+}

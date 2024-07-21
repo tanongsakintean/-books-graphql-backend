@@ -1,6 +1,7 @@
 package com.books.backend.service.impl
 
 import com.books.backend.models.dto.UserDTO
+import com.books.backend.models.dto.errors.NotFoundException
 import com.books.backend.models.entity.User
 import com.books.backend.repository.UserRepository
 import com.books.backend.service.UserService
@@ -34,7 +35,8 @@ class UserServiceImpl() : UserService {
                     )
                 )
             }
-            .switchIfEmpty(Mono.just(UserDTO()))
+            .switchIfEmpty(Mono.error(NotFoundException("User with userId $userId not found")))
+            .onErrorResume { Mono.error(it) }
     }
 
     override fun getUsers(): Flux<UserDTO> {
@@ -80,5 +82,40 @@ class UserServiceImpl() : UserService {
                     )
                 )
             }
+            .onErrorResume { throw Exception(it) }
+    }
+
+    override fun updateUser(user: UserDTO, userId: Long): Mono<UserDTO> {
+        return userRepository.findByUserId(userId)
+            .flatMap {
+                userRepository.save(
+                    it.copy(
+                        username = user.username.toString().trim(),
+                        lastName = user.lastName.toString().trim(),
+                        firstName = user.firstName.toString().trim(),
+                        email = user.email.toString().trim(),
+                    )
+                )
+                    .flatMap { itm ->
+                        Mono.just(
+                            UserDTO(
+                                userId = itm.userId,
+                                username = itm.username,
+                                email = itm.email,
+                                firstName = itm.firstName,
+                                lastName = itm.lastName,
+                                createdAt = itm.createdAt
+                            )
+                        )
+                    }
+                    .onErrorResume { throw Exception(it) }
+            }
+            .switchIfEmpty(Mono.error(NotFoundException("User with userId $userId not found")))
+    }
+
+    override fun deleteUser(userId: Long): Mono<UserDTO> {
+        return userRepository.deleteById(userId)
+            .then(Mono.defer { Mono.just(UserDTO()) })
+            .onErrorResume { throw Exception(it) }
     }
 }

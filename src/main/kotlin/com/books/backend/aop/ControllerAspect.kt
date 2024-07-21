@@ -82,7 +82,7 @@ class ControllerAspect {
         return map
     }
 
-    @Around("execution(* com.springboot.boilerplate_webflux.controller.*.*(..))")
+    @Around("execution(* com.books.backend.query.*.*(..))")
 
     @Throws(Throwable::class)
     fun logController(joinPoint: ProceedingJoinPoint): Any? {
@@ -100,11 +100,11 @@ class ControllerAspect {
         requestDTO.queryString = getQueryString(request)
         requestDTO.headers = headers
 
-        if("POST".equals(request.method, true) || "PUT".equals(request.method, true) || "PATCH".equals(request.method, true)) {
+        if("POST".equals(request.method, true)) {
             try {
                 val objList = ArrayList<Any?>()
                 for(element in joinPoint.args) {
-                    if(!(element is StandardMultipartHttpServletRequest)) {
+                    if(element !is StandardMultipartHttpServletRequest) {
                         objList.add(element)
                     }
                 }
@@ -161,7 +161,7 @@ class ControllerAspect {
                 responseDTO.exception = ""
 
                 val details: MutableList<Map<String, Any>> = ArrayList()
-                val exceptionValue = if(e.responseBodyAsString.isNullOrBlank()){
+                val exceptionValue = if(e.responseBodyAsString.isBlank()){
                     emptyMap()
                 } else {
                     try {
@@ -186,20 +186,20 @@ class ControllerAspect {
                 }
                 details.add(exceptionValue)
 
-                val error = ErrorResponseDTO(httpException.rawStatusCode, httpException.statusText, details)
+                val error = ErrorResponseDTO(httpException.statusCode.value(), httpException.statusText, details)
                 responseDTO.body = error
 
                 responseTemp = ResponseEntity(error, httpException.statusCode)
             } else if (e is HttpStatusCodeException) {
                 val httpException: HttpStatusCodeException = e
 
-                responseDTO.status = httpException.rawStatusCode
+                responseDTO.status = httpException.statusCode.value()
                 responseDTO.responseTime = dateFormat.format(Date())
                 responseDTO.headers = getHeadersResponse(httpException.responseHeaders)
                 responseDTO.body = httpException.responseBodyAsString
                 responseDTO.exception = ""
                 val details: MutableList<Map<String, Any>> = ArrayList()
-                val exceptionValue = if(e.responseBodyAsString.isNullOrBlank()){
+                val exceptionValue = if(e.responseBodyAsString.isBlank()){
                     emptyMap()
                 } else {
                     try {
@@ -224,20 +224,20 @@ class ControllerAspect {
                 }
                 details.add(exceptionValue)
 
-                val error = ErrorResponseDTO(httpException.rawStatusCode, httpException.statusText, details)
+                val error = ErrorResponseDTO(httpException.statusCode.value(), httpException.statusText, details)
                 responseDTO.body = error
 
-                responseTemp = ResponseEntity(error, HttpStatus.valueOf(httpException.rawStatusCode))
+                responseTemp = ResponseEntity(error, HttpStatus.valueOf(httpException.statusCode.value()))
             } else if (e is RestClientResponseException) {
                 val httpException: RestClientResponseException = e
 
-                responseDTO.status = httpException.rawStatusCode
+                responseDTO.status = httpException.statusCode.value()
                 responseDTO.responseTime = dateFormat.format(Date())
                 responseDTO.headers = getHeadersResponse(httpException.responseHeaders)
                 responseDTO.body = httpException.responseBodyAsString
                 responseDTO.exception = ""
                 val details: MutableList<Map<String, Any>> = ArrayList()
-                val exceptionValue = if(e.responseBodyAsString.isNullOrBlank()){
+                val exceptionValue = if(e.responseBodyAsString.isBlank()){
                     emptyMap()
                 } else {
                     try {
@@ -262,10 +262,10 @@ class ControllerAspect {
                 }
                 details.add(exceptionValue)
 
-                val error = ErrorResponseDTO(httpException.rawStatusCode, httpException.statusText, details)
+                val error = ErrorResponseDTO(httpException.statusCode.value(), httpException.statusText, details)
                 responseDTO.body = error
 
-                responseTemp = ResponseEntity(error, HttpStatus.valueOf(httpException.rawStatusCode))
+                responseTemp = ResponseEntity(error, HttpStatus.valueOf(httpException.statusCode.value()))
             } else {
                 val details: MutableList<Map<String, Any>> = ArrayList()
 

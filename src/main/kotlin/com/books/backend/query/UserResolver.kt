@@ -18,7 +18,7 @@ class UserResolver {
     @QueryMapping
     fun user(
         @Argument userId: Long
-    ): Mono<UserDTO>{
+    ): Mono<UserDTO> {
         return userService.getUser(userId)
     }
 
@@ -34,5 +34,17 @@ class UserResolver {
         return userService.createUser(user)
     }
 
+    @MutationMapping
+    fun updateUser(
+        @Argument user: UserDTO, @Argument userId: Long
+    ): Mono<UserDTO> {
+        return userService.updateUser(user, userId)
+    }
 
+    @MutationMapping
+    fun deleteUser(
+        @Argument userId: Long
+    ): Mono<UserDTO> {
+        return userService.deleteUser(userId)
+    }
 }

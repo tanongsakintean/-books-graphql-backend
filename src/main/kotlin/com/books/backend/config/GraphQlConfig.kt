@@ -4,6 +4,7 @@ import graphql.scalars.ExtendedScalars
 import graphql.schema.idl.RuntimeWiring
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
+import org.springframework.graphql.execution.DataFetcherExceptionResolver
 import org.springframework.graphql.execution.RuntimeWiringConfigurer
 
 
@@ -16,4 +17,10 @@ class GraphQlConfig {
                 .scalar(ExtendedScalars.DateTime)
         }
     }
+
+    @Bean
+    fun exceptionResolver(): DataFetcherExceptionResolver {
+        return GraphQLExceptionHandler()
+    }
 }
+

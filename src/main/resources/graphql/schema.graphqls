@@ -14,5 +14,5 @@ type Mutation {
 
     createUser(user: UserInput): User
     updateUser(user: UserInput, userId: ID): User
-    deleteUser(userId: ID): User
+    deleteUser(userId: ID): Boolean
 }

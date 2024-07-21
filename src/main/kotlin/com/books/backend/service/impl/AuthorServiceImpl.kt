@@ -1,6 +1,7 @@
 package com.books.backend.service.impl
 
 import com.books.backend.models.dto.AuthorDTO
+import com.books.backend.models.dto.errors.NotFoundException
 import com.books.backend.models.dto.response.ApiResponse
 import com.books.backend.models.entity.Author
 import com.books.backend.repository.AuthorRepository
@@ -62,7 +63,8 @@ class AuthorServiceImpl : AuthorService {
                     birthDay = it.birthDay
                 )
             )
-        }.switchIfEmpty(Mono.just(AuthorDTO()))
+        }.switchIfEmpty(Mono.error(NotFoundException("author with authorId $authorId not found")))
+            .onErrorResume { throw Exception(it) }
     }
 
     override fun createAuthor(author: AuthorDTO): Mono<AuthorDTO> {
@@ -74,34 +76,32 @@ class AuthorServiceImpl : AuthorService {
         )
 
 
-        return authorRepository.save(entityToSave)
-            .flatMap { exits ->
-                val cacheAuthor = JSONUtils.covertToJson(
-                    mapOf(
-                        "lastName" to exits.lastName.toString().trim(),
-                        "firstName" to exits.firstName.toString().trim(),
-                        "bio" to exits.bio.toString().trim(),
-                        "birthDay" to exits.birthDay.toString(),
-                        "authorId" to exits.authorId.toString()
-                    )
+        return authorRepository.save(entityToSave).flatMap { exits ->
+            val cacheAuthor = JSONUtils.covertToJson(
+                mapOf(
+                    "lastName" to exits.lastName.toString().trim(),
+                    "firstName" to exits.firstName.toString().trim(),
+                    "bio" to exits.bio.toString().trim(),
+                    "birthDay" to exits.birthDay.toString(),
+                    "authorId" to exits.authorId.toString()
                 )
-                logger.info(cacheAuthor)
-                cacheSave("authors", cacheAuthor!!)
-                    .flatMap { isTrue ->
-                        var response = AuthorDTO()
-                        if (isTrue) {
-                            response = AuthorDTO(
-                                authorId = exits.authorId,
-                                firstName = exits.firstName,
-                                lastName = exits.lastName,
-                                bio = exits.bio,
-                                birthDay = exits.birthDay
-                            )
-                        }
-                        Mono.just(response)
-                    }
-
+            )
+            logger.info(cacheAuthor)
+            cacheSave("authors", cacheAuthor!!).flatMap { isTrue ->
+                var response = AuthorDTO()
+                if (isTrue) {
+                    response = AuthorDTO(
+                        authorId = exits.authorId,
+                        firstName = exits.firstName,
+                        lastName = exits.lastName,
+                        bio = exits.bio,
+                        birthDay = exits.birthDay
+                    )
+                }
+                Mono.just(response)
             }
+
+        }.onErrorResume { throw Exception(it) }
     }
 
     override fun updateAuthor(author: AuthorDTO, authorId: Long): Mono<AuthorDTO> {
@@ -124,12 +124,14 @@ class AuthorServiceImpl : AuthorService {
                     )
                 )
             }
-        }.switchIfEmpty(Mono.just(AuthorDTO()))
+        }.switchIfEmpty(Mono.error(NotFoundException("author with authorId $authorId not found")))
+            .onErrorResume { throw Exception(it) }
     }
 
     override fun deleteAuthor(authorId: Long): Mono<AuthorDTO> {
         return authorRepository.findByAuthorId(authorId).flatMap {
             authorRepository.delete(it).then(Mono.defer { Mono.just(AuthorDTO()) })
+                .onErrorResume { throw Exception(it) }
         }
     }
 

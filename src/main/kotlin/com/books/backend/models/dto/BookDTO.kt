@@ -11,4 +11,5 @@ data class BookDTO(
     val genreId: Int? = null,
     val summary: String? = null,
     val pageCount: Int? = null,
+    val authorId: List<Long>? = null
     )

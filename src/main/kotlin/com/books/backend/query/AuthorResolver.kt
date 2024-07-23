@@ -46,7 +46,7 @@ class AuthorResolver {
     @MutationMapping
     fun deleteAuthor(
         @Argument authorId: Long
-    ): Mono<AuthorDTO> {
+    ): Mono<Boolean> {
        return bookService.deleteAuthor(authorId)
     }
 

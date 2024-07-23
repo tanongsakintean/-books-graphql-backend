@@ -3,16 +3,40 @@ scalar DateTime
 type Query {
     author(authorId: ID): Author
     authors: [Author]
+
     user(userId: ID): User
     users: [User]
+
+    genre(genreId: ID): Genre
+    genres: [Genre]
+
+    publisher(publisherId:ID): Publisher
+    publishers: [Publisher]
+
+    book(bookId: ID): Book
+    books: [Book]
+
+    bookAuthor(authorId: ID): BookAuthor
 }
 
 type Mutation {
     createAuthor(author: AuthorInput): Author
     updateAuthor(author: AuthorInput,authorId: ID): Author
-    deleteAuthor(authorId: ID): Author
+    deleteAuthor(authorId: ID): Boolean
 
     createUser(user: UserInput): User
     updateUser(user: UserInput, userId: ID): User
     deleteUser(userId: ID): Boolean
+
+    createGenre(genre: GenreInput): Genre
+    updateGenre(genre: GenreInput, genreId: ID): Genre
+    deleteGenre(genreId: ID): Boolean
+
+    createPublisher(publisher: PublisherInput): Publisher
+    updatePublisher(publisher: PublisherInput, publisherId: ID): Publisher
+    deletePublisher(publisherId: ID): Boolean
+
+    createBook(book: BookInput): Book
+    updateBook(book: BookInput, bookId: ID): Book
+    deleteBook(bookId:ID): Boolean
 }

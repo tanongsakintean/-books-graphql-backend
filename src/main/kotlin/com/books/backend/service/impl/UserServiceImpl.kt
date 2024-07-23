@@ -113,9 +113,9 @@ class UserServiceImpl() : UserService {
             .switchIfEmpty(Mono.error(NotFoundException("User with userId $userId not found")))
     }
 
-    override fun deleteUser(userId: Long): Mono<UserDTO> {
-        return userRepository.deleteById(userId)
-            .then(Mono.defer { Mono.just(UserDTO()) })
+    override fun deleteUser(userId: Long): Mono<Boolean> {
+        return userRepository.deleteByUserId(userId)
+            .flatMap { Mono.just(it) }
             .onErrorResume { throw Exception(it) }
     }
 }

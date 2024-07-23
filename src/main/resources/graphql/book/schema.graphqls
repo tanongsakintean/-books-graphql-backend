@@ -2,23 +2,28 @@ type Book {
     bookId: ID
     title: String
     isbn: String
-    publicationDate: String
+    publicDate: String
     publisherId: Int
     genreId: Int
     summary: String
     pageCount: Int
 }
 
+type BookPublisher {
+    book: Book
+    publisher: Publisher
+}
+
 type BookAuthor {
-    bookId: Int
-    authorId: Int
+    author:Author
+    books:[BookPublisher]
 }
 
 
 input BookInput {
     title: String
     isbn: String
-    publicationDate: String
+    publicDate: String
     publisherId: Int
     genreId: Int
     summary: String

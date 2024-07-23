@@ -1,6 +1,8 @@
 package com.books.backend.query
 
 import com.books.backend.models.dto.UserDTO
+import com.books.backend.models.entity.BookAuthor
+import com.books.backend.service.BookAuthorService
 import com.books.backend.service.UserService
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.graphql.data.method.annotation.Argument
@@ -14,6 +16,9 @@ import reactor.core.publisher.Mono
 class UserResolver {
     @Autowired
     lateinit var userService: UserService
+
+    @Autowired
+    lateinit var bookAuthorService: BookAuthorService
 
     @QueryMapping
     fun user(
@@ -44,7 +49,7 @@ class UserResolver {
     @MutationMapping
     fun deleteUser(
         @Argument userId: Long
-    ): Mono<UserDTO> {
+    ): Mono<Boolean> {
         return userService.deleteUser(userId)
     }
 }

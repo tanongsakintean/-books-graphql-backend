@@ -128,101 +128,10 @@ class AuthorServiceImpl : AuthorService {
             .onErrorResume { throw Exception(it) }
     }
 
-    override fun deleteAuthor(authorId: Long): Mono<AuthorDTO> {
-        return authorRepository.findByAuthorId(authorId).flatMap {
-            authorRepository.delete(it).then(Mono.defer { Mono.just(AuthorDTO()) })
-                .onErrorResume { throw Exception(it) }
-        }
+    override fun deleteAuthor(authorId: Long): Mono<Boolean> {
+        return authorRepository.deleteAllByAuthorId(authorId).flatMap { Mono.just(it) }
+            .onErrorResume { throw Exception(it) }
     }
-
-
-//    override fun getById(id: Long): Mono<Map<String, Any?>> {
-//        return authorRepository.findById(id)
-//            .flatMap {
-//                bookRepository.findById(it.id!!)
-//                    .flatMap { itm ->
-//                        val response = mapOf(
-//                            "id" to itm.id,
-//                            "name" to itm.name,
-//                            "pageCount" to itm.pageCount,
-//                            "author" to mapOf(
-//                                "id" to it.id,
-//                                "firstName" to it.firstName,
-//                                "lastName" to it.lastName,
-//                            )
-//                        )
-//
-//                        Mono.just(
-//                            response
-//                        )
-//                    }
-//            }
-//            .onErrorResume {
-//                Mono.just(emptyMap())
-//            }
-//    }
-//
-//    override fun addAuthor(body: AuthorDTO): Mono<Author> {
-//        return authorRepository.save(
-//            Author(
-//                lastName = body.lastName,
-//                firstName = body.firstName
-//            )
-//        )
-//    }
-//
-//    override fun addBook(body: BookDTO): Mono<Map<String, Any?>> {
-//        return bookRepository.save(
-//            Book(
-//                pageCount = body.pageCount,
-//                name = body.name,
-//                authorId = body.authorId,
-//            )
-//        )
-//            .flatMap {
-//                authorRepository.findById(it.authorId!!.toLong())
-//                    .flatMap { itm ->
-//                        val response = mapOf(
-//                            "id" to it.id,
-//                            "name" to it.name,
-//                            "pageCount" to it.pageCount,
-//                            "author" to mapOf(
-//                                "id" to it.id,
-//                                "firstName" to itm.firstName,
-//                                "lastName" to itm.lastName,
-//                            )
-//                        )
-//                        Mono.just(
-//                            response
-//                        )
-//                    }
-//            }
-//    }
-//
-//    override fun findAll(): Flux<Map<String, Any>> {
-//        return authorRepository.findAll()
-//            .flatMap { author ->
-//                bookRepository.findByAuthorId(author.id!!)
-//                    .collectList()
-//                    .map { books ->
-//                        mapOf(
-//                            "author" to mapOf( // author map object
-//                                "id" to author.id,
-//                                "firstName" to author.firstName,
-//                                "lastName" to author.lastName,
-//                                "books" to books.map { book -> // books map object
-//                                    mapOf(
-//                                        "id" to book.id,
-//                                        "name" to book.name,
-//                                        "pageCount" to book.pageCount,
-//                                        "authorId" to book.authorId
-//                                    )
-//                                }
-//                            )
-//                        )
-//                    }
-//            }
-//    }
 
     fun cacheSave(key: String, value: String): Mono<Boolean> {
         return redisTemplate.opsForValue().set(key, value)

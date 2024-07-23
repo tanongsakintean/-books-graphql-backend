@@ -11,7 +11,7 @@ interface AuthorService {
     fun getAuthor(authorId: Long): Mono<AuthorDTO>
     fun createAuthor(author: AuthorDTO): Mono<AuthorDTO>
     fun updateAuthor(author: AuthorDTO,authorId: Long): Mono<AuthorDTO>
-    fun deleteAuthor(authorId: Long): Mono<AuthorDTO>
+    fun deleteAuthor(authorId: Long): Mono<Boolean>
 //    fun getById(id: Long): Mono<Map<String, Any?>>
 //    fun addAuthor(body: AuthorDTO): Mono<Author>
 //    fun addBook(body: BookDTO): Mono<Map<String, Any?>>

@@ -7,4 +7,5 @@ import reactor.core.publisher.Mono
 
 interface BookAuthorService {
     fun getBookAuthor(authorId: Long): Mono<BookAuthorDTO>
+    fun getBookAuthors(): Flux<BookAuthorDTO>
 }

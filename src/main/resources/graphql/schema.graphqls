@@ -17,6 +17,7 @@ type Query {
     books: [Book]
 
     bookAuthor(authorId: ID): BookAuthor
+    bookAuthors:[BookAuthor]
 }
 
 type Mutation {

@@ -12,6 +12,7 @@ type Book {
 type BookPublisher {
     book: Book
     publisher: Publisher
+    genre: Genre
 }
 
 type BookAuthor {

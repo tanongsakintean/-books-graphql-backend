@@ -1,14 +1,12 @@
 package com.books.backend.service.impl
 
 import com.books.backend.models.dto.*
-import com.books.backend.repository.AuthorRepository
-import com.books.backend.repository.BookAuthorRepository
-import com.books.backend.repository.BookRepository
-import com.books.backend.repository.PublisherRepository
+import com.books.backend.repository.*
 import com.books.backend.service.BookAuthorService
 import com.books.backend.util.Log
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.stereotype.Service
+import reactor.core.publisher.Flux
 import reactor.core.publisher.Mono
 
 @Service
@@ -26,6 +24,9 @@ class BookAuthorServiceImpl : BookAuthorService {
 
     @Autowired
     lateinit var publisherRepository: PublisherRepository
+
+    @Autowired
+    lateinit var genreRepository: GenreRepository
 
 
     override fun getBookAuthor(
@@ -47,25 +48,30 @@ class BookAuthorServiceImpl : BookAuthorService {
 
         val bookPublisher = books.flatMap { book ->
             publisherRepository.findByPublisherId(book.publisherId!!.toLong()).flatMap { publisher ->
-                Mono.just(
-                    BookPublisherDTO(
-                        book = BookDTO(
-                            bookId = book.bookId,
-                            genreId = book.genreId,
-                            publicDate = book.publicDate,
-                            publisherId = book.publisherId,
-                            title = book.title,
-                            isbn = book.isbn,
-                            pageCount = book.pageCount,
-                            summary = book.summary
-                        ), publisher = PublisherDTO(
-                            publisherId = publisher.publisherId,
-                            name = publisher.name,
-                            address = publisher.address,
-                            website = publisher.website,
+                genreRepository.findByGenreId(book.genreId!!.toLong()).flatMap { genre ->
+                    Mono.just(
+                        BookPublisherDTO(
+                            book = BookDTO(
+                                bookId = book.bookId,
+                                genreId = book.genreId,
+                                publicDate = book.publicDate,
+                                publisherId = book.publisherId,
+                                title = book.title,
+                                isbn = book.isbn,
+                                pageCount = book.pageCount,
+                                summary = book.summary
+                            ), publisher = PublisherDTO(
+                                publisherId = publisher.publisherId,
+                                name = publisher.name,
+                                address = publisher.address,
+                                website = publisher.website,
+                            ), genre = GenreDTO(
+                                name = genre.name,
+                                genreId = genre.genreId,
+                            )
                         )
                     )
-                )
+                }
             }
         }
 
@@ -73,6 +79,12 @@ class BookAuthorServiceImpl : BookAuthorService {
             BookAuthorDTO(
                 author = it.t1, books = it.t2
             )
+        }
+    }
+
+    override fun getBookAuthors(): Flux<BookAuthorDTO> {
+        return bookAuthorRepository.findAll().mapNotNull { it.authorId }.distinct().flatMap {
+            getBookAuthor(it!!)
         }
     }
 }

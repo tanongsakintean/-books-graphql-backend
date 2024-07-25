@@ -47,10 +47,10 @@ class BookAuthorServiceImpl : BookAuthorService {
         val books = bookAuthorRepository.findByAuthorId(authorId).flatMap { bookRepository.findByBookId(it.bookId!!) }
 
         val bookPublisher = books.flatMap { book ->
-            publisherRepository.findByPublisherId(book.publisherId!!.toLong()).flatMap { publisher ->
-                genreRepository.findByGenreId(book.genreId!!.toLong()).flatMap { genre ->
+            publisherRepository.findByPublisherId(book.publisherId!!).flatMap { publisher ->
+                genreRepository.findByGenreId(book.genreId!!).flatMap { genre ->
                     Mono.just(
-                        BookPublisherDTO(
+                        BookDetailDTO(
                             book = BookDTO(
                                 bookId = book.bookId,
                                 genreId = book.genreId,

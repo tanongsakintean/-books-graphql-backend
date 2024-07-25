@@ -18,6 +18,9 @@ type Query {
 
     bookAuthor(authorId: ID): BookAuthor
     bookAuthors:[BookAuthor]
+
+    review(reviewId: ID): ReviewDetail
+    reviews: [ReviewDetail]
 }
 
 type Mutation {
@@ -40,4 +43,8 @@ type Mutation {
     createBook(book: BookInput): Book
     updateBook(book: BookInput, bookId: ID): Book
     deleteBook(bookId:ID): Boolean
+
+    createReview(review: ReviewInput): Review
+    updateReview(review: ReviewInput, reviewId: ID): Review
+    deleteReview(reviewId: ID): Boolean
 }

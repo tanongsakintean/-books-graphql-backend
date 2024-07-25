@@ -53,7 +53,6 @@ class UserServiceImpl() : UserService {
                     )
                 )
             }
-            .switchIfEmpty(Flux.just(UserDTO()))
     }
 
     override fun createUser(user: UserDTO): Mono<UserDTO> {

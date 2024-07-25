@@ -9,7 +9,7 @@ type Book {
     pageCount: Int
 }
 
-type BookPublisher {
+type BookDetail {
     book: Book
     publisher: Publisher
     genre: Genre
@@ -17,7 +17,7 @@ type BookPublisher {
 
 type BookAuthor {
     author:Author
-    books:[BookPublisher]
+    books:[BookDetail]
 }
 
 

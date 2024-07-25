@@ -7,9 +7,9 @@ data class BookDTO(
     val title: String? = null,
     val isbn: String? = null,
     val publicDate: Timestamp? = null,
-    val publisherId: Int? = null,
-    val genreId: Int? = null,
+    val publisherId: Long? = null,
+    val genreId: Long? = null,
     val summary: String? = null,
-    val pageCount: Int? = null,
+    val pageCount: Long? = null,
     val authorId: List<Long>? = null
     )

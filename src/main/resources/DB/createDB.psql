@@ -61,6 +61,4 @@ CREATE TABLE Reviews (
     rating INT CHECK (rating BETWEEN 1 AND 5),
     comment TEXT,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    FOREIGN KEY (book_id) REFERENCES Books(book_id),
-    FOREIGN KEY (user_id) REFERENCES Users(user_id)
 );

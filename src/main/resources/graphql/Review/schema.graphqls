@@ -7,6 +7,12 @@ type Review {
     createdAt: String
 }
 
+type ReviewDetail {
+    review: Review
+    user: User
+    book: Book
+}
+
 input ReviewInput {
     bookId: Int
     userId: Int
